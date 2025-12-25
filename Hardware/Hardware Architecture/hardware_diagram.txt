@@ -1,0 +1,26 @@
+Smart Bin Hardware Architecture (ASCII Art):
+
++-------------------+
+|     Bin Lid       |
+|  Solar Panel (5W) |
++-------------------+
+|                   |
+|  Ultrasonic       |
+|  Sensor (HC-SR04) |
+|                   |
++-------------------+
+|                   |
+|  ESP32 MCU        | <-- LoRa Module (SX1276)
+|  + Battery (Li-ion)|
+|                   |
++-------------------+
+| Waste Bin Body    |
++-------------------+
+
+Connections:
+- Ultrasonic Trig -> ESP32 GPIO5
+- Ultrasonic Echo -> ESP32 GPIO18
+- LoRa SPI to ESP32 standard pins (MOSI:23, MISO:19, SCK:18, CS:5)
+- Solar panel to battery charger circuit.
+
+This setup ensures low-power operation with periodic sensing.
