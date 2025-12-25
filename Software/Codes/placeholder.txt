@@ -4,3 +4,76 @@ Future implementation will include:
 - Fill level calculation
 - LoRa transmission
 - Deep sleep mode
+
+Software/Codes/route_optimizer.py
+# Python script for Route Optimization
+# Uses nearest neighbor for TSP approximation and KMeans for clustering
+
+import numpy as np
+from sklearn.cluster import KMeans
+from scipy.spatial.distance import cdist  # For distance matrix
+
+def calculate_distance(point1, point2):
+    """Euclidean distance (replace with real GPS distance if API integrated)"""
+    return np.linalg.norm(np.array(point1) - np.array(point2))
+
+def nearest_neighbor_tsp(bins, start):
+    """Nearest neighbor heuristic for TSP"""
+    route = [start]
+    current = start
+    remaining = list(bins)
+    
+    while remaining:
+        distances = [calculate_distance(current, bin_loc) for bin_loc in remaining]
+        next_index = np.argmin(distances)
+        next_bin = remaining.pop(next_index)
+        route.append(next_bin)
+        current = next_bin
+    
+    route.append(start)  # Return to depot
+    return route
+
+def optimize_routes(bins_list, truck_location, depot_location, num_clusters=3):
+    """
+    bins_list: list of dicts {'id': str, 'fill_level': int, 'location': (x,y)}
+    truck_location: (x,y)
+    depot_location: (x,y)
+    """
+    full_bins = [b for b in bins_list if b['fill_level'] > 80]
+    if not full_bins:
+        return "No collections needed"
+    
+    # Extract locations
+    locations = np.array([b['location'] for b in full_bins])
+    
+    # Cluster bins
+    kmeans = KMeans(n_clusters=num_clusters)
+    kmeans.fit(locations)
+    labels = kmeans.labels_
+    
+    optimized_routes = []
+    for cluster_id in range(num_clusters):
+        cluster_indices = np.where(labels == cluster_id)[0]
+        cluster_bins = [full_bins[i] for i in cluster_indices]
+        
+        # Sort by fill level descending
+        sorted_cluster = sorted(cluster_bins, key=lambda b: b['fill_level'], reverse=True)
+        cluster_locs = [b['location'] for b in sorted_cluster]
+        
+        # Apply nearest neighbor starting from truck_location
+        route = nearest_neighbor_tsp(cluster_locs, truck_location)
+        optimized_routes.append(route)
+    
+    # Simulate sending notification
+    print("Optimized Routes:", optimized_routes)
+    return optimized_routes
+# Sample usage
+sample_bins = [
+    {'id': 'BIN1', 'fill_level': 85, 'location': (0, 0)},
+    {'id': 'BIN2', 'fill_level': 90, 'location': (1, 2)},
+    {'id': 'BIN3', 'fill_level': 70, 'location': (3, 4)},
+    {'id': 'BIN4', 'fill_level': 95, 'location': (5, 6)},
+]
+truck_loc = (0, 0)
+depot_loc = (0, 0)
+optimize_routes(sample_bins, truck_loc, depot_loc)
