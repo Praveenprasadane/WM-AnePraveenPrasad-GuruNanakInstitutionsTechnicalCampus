@@ -1,0 +1,3 @@
+Software architecture diagrams and notes.
+- Data flow: Sensor → ESP32 → LoRa → Gateway → MQTT → Cloud → Dashboard
+- Publish-subscribe model for real-time alerts
