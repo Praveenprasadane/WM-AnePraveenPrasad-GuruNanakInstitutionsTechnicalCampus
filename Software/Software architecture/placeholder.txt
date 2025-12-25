@@ -1,3 +1,19 @@
 Software architecture diagrams and notes.
 - Data flow: Sensor → ESP32 → LoRa → Gateway → MQTT → Cloud → Dashboard
 - Publish-subscribe model for real-time alerts
+
+Data Flow Architecture (ASCII Art):
+
+Bin Sensor --> ESP32 (Process Fill Level) --> LoRa Transmit
+   |
+   v
+LoRa Gateway --> Internet (MQTT Publish) --> Cloud (AWS/Thingsboard)
+   |
+   v
+Cloud Processing (Store in DB, Analyze) --> Dashboard (Grafana/Node-RED)
+   |
+   v
+Alerts & Routes --> Mobile App / Email (for Authorities/Drivers)
+
+Protocols: LoRa for edge, MQTT for cloud integration.
+Justification: MQTT is lightweight, supports pub/sub for real-time updates.
