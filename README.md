@@ -21,6 +21,7 @@ IoT-based smart waste bin monitoring system using ultrasonic sensors, ESP32, LoR
   - Hardware Architecture/
   - Etc./
 
-The complete 11-page conceptual design document (PDF) is uploaded here and submitted separately.
+The complete 11-page conceptual design document (PDF) is uploaded here and submitted separately.Here the link
+https://drive.google.com/file/d/1Ly-ED_eUViqyNxVW9lzvUKeHUWvOhnia/view?usp=drivesdk
 
 GitHub Repository Link: https://github.com/Praveenprasadane/WM-AnePraveenPrasad-GuruNanakInstitutionsTechnicalCampus
