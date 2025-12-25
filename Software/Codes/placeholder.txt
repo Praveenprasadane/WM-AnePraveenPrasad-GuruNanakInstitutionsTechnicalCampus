@@ -1,0 +1,6 @@
+Placeholder for ESP32 code.
+Future implementation will include:
+- Ultrasonic sensor reading
+- Fill level calculation
+- LoRa transmission
+- Deep sleep mode
